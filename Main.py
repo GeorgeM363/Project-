@@ -34,11 +34,15 @@ class MLTrader(Strategy):
     def get_dates(self):
         today = self.get_datetime()
         end_range = today - Timedelta(days = 3)
-        return today.strftime('%Y-%m-%d'), end_range
+
+        today_str = today.isoformat()
+        end_range_str = end_range.isoformat()
+
+        return today_str, end_range_str
     
     def get_news(self):
         today, end_range = self.get_dates()
-        news = self.api.get_news(symbol = self.symbol, start = today, end = end_range)
+        news = self.api.get_news(symbol = self.symbol, start = end_range, end = today)
 
         news = [ev.__dict__["_raw"]["headline"] for ev in news]
         return news
